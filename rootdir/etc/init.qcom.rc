@@ -122,6 +122,9 @@ on boot
 
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
+    #Set Permissions for gx_fpd
+    chmod 0755 /system/bin/gx_fpd
+
 #   Assign TCP buffer thresholds to be ceiling value of technology maximums
 #   Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  8388608
@@ -645,6 +648,13 @@ service fingerprintd /system/bin/fingerprintd
     group drmrpc input system
     socket fpce stream 0660 system system
     writepid /dev/cpuset/system-background/tasks
+
+service gx_fpd /system/bin/gx_fpd
+    class late_start
+    user root
+    group root system
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:object_r:gx_fpd:s0
 
 service imsqmidaemon /system/bin/imsqmidaemon
     class main
